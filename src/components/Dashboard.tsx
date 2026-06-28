@@ -163,46 +163,50 @@ export const Dashboard: React.FC<DashboardProps> = ({
           </div>
 
           {/* Mathematical Perfect Arc Speedometer Gauge */}
-          <div className="relative flex flex-col items-center justify-center py-4">
-            <svg className="w-48 h-28" viewBox="0 0 160 100">
-              {/* Outer Gauge Background Slot */}
-              <path 
-                d="M 20,90 A 60,60 0 0,1 140,90" 
-                stroke="#2a2a2a" 
-                strokeWidth="11" 
-                fill="none" 
-                strokeLinecap="round" 
-              />
-              {/* Active Progress colored overlay arc */}
-              <path 
-                d="M 20,90 A 60,60 0 0,1 140,90" 
-                stroke="url(#speedometerGrad)" 
-                strokeWidth="11" 
-                fill="none" 
-                strokeLinecap="round" 
-                strokeDasharray="188.5" 
-                strokeDashoffset={188.5 - (188.5 * Math.max(0.01, completionPercentage / 100))}
-                className="transition-all duration-1000 ease-out"
-              />
-              
-              <defs>
-                <linearGradient id="speedometerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="#ffb366" />
-                  <stop offset="50%" stopColor="#ff9124" />
-                  <stop offset="100%" stopColor="#ff7a00" />
-                </linearGradient>
-              </defs>
-            </svg>
+          <div className="flex flex-col items-center justify-center py-2">
+            <div className="relative">
+              <svg className="w-48 h-28" viewBox="0 0 160 100">
+                {/* Outer Gauge Background Slot */}
+                <path 
+                  d="M 20,90 A 60,60 0 0,1 140,90" 
+                  stroke="#2a2a2a" 
+                  strokeWidth="11" 
+                  fill="none" 
+                  strokeLinecap="round" 
+                />
+                {/* Active Progress colored overlay arc */}
+                <path 
+                  d="M 20,90 A 60,60 0 0,1 140,90" 
+                  stroke="url(#speedometerGrad)" 
+                  strokeWidth="11" 
+                  fill="none" 
+                  strokeLinecap="round" 
+                  strokeDasharray="188.5" 
+                  strokeDashoffset={188.5 - (188.5 * Math.max(0.01, completionPercentage / 100))}
+                  className="transition-all duration-1000 ease-out"
+                />
+                
+                <defs>
+                  <linearGradient id="speedometerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="#ffb366" />
+                    <stop offset="50%" stopColor="#ff9124" />
+                    <stop offset="100%" stopColor="#ff7a00" />
+                  </linearGradient>
+                </defs>
+              </svg>
 
-            {/* Float values inside the speed gauge */}
-            <div className="absolute bottom-0 flex flex-col items-center justify-center text-center w-full pb-3">
-              <span className={`text-2xl md:text-3xl font-bold font-sans tracking-tight leading-none ${statusColorClass}`}>
-                {momentumStatus}
-              </span>
-              <span className="font-sans text-[11px] font-medium text-zinc-400 mt-1.5 tracking-wide block bg-[#0a0a0a]/80 px-2 rounded">
-                {completedTasksCount} / {totalTasksCount} Daily Checkpoints
-              </span>
+              {/* Status text inside the gauge */}
+              <div className="absolute inset-0 flex flex-col items-center justify-end pb-3">
+                <span className={`text-2xl md:text-3xl font-bold font-sans tracking-tight leading-none ${statusColorClass}`}>
+                  {momentumStatus}
+                </span>
+              </div>
             </div>
+
+            {/* Sub-text moved safely below the SVG */}
+            <span className="font-sans text-[11px] font-medium text-zinc-400 mt-2 tracking-wide block">
+              {completedTasksCount} / {totalTasksCount} Daily Checkpoints
+            </span>
           </div>
 
           <div className="border-t border-border pt-4 flex items-center justify-between text-xs">
@@ -503,26 +507,37 @@ export const Dashboard: React.FC<DashboardProps> = ({
             </div>
             
             <div className="flex items-end justify-between h-32 gap-2 border-b border-border pb-2">
-              {last7Days.map((log, idx) => {
-                const dayTotal = (log.studyHours?.threejs || 0) + (log.studyHours?.frontend || 0);
-                const barHeight = Math.max(5, (dayTotal / maxDailyHours) * 100);
-                const dayName = new Date(log.date).toLocaleDateString('en-US', { weekday: 'short' });
-                
-                return (
-                  <div key={idx} className="flex flex-col items-center justify-end h-full gap-2 w-full group">
-                    <div className="text-[10px] font-mono text-[#ff7a00] opacity-0 group-hover:opacity-100 transition-opacity">
-                      {dayTotal}h
-                    </div>
-                    <div 
-                      className="w-full bg-[#1e1e1e] border border-border rounded-t flex flex-col justify-end overflow-hidden group-hover:border-[#ff7a00]/50 transition-all"
-                      style={{ height: `${barHeight}%` }}
-                    >
-                      <div className="w-full bg-[#ff7a00] opacity-80" style={{ height: '100%' }}></div>
-                    </div>
-                    <span className="text-[9px] font-sans text-zinc-500 uppercase tracking-widest">{dayName}</span>
+              {last7Days.length === 0 ? (
+                <div className="w-full h-full flex flex-col items-center justify-center text-center opacity-50">
+                  <span className="text-xs text-zinc-500 font-sans uppercase tracking-wider mb-2">Awaiting Data</span>
+                  <div className="flex gap-2">
+                    {[1,2,3,4,5,6,7].map(i => (
+                      <div key={i} className="w-8 h-1 bg-border rounded-full"></div>
+                    ))}
                   </div>
-                );
-              })}
+                </div>
+              ) : (
+                last7Days.map((log, idx) => {
+                  const dayTotal = (log.studyHours?.threejs || 0) + (log.studyHours?.frontend || 0);
+                  const barHeight = Math.max(5, (dayTotal / maxDailyHours) * 100);
+                  const dayName = new Date(log.date).toLocaleDateString('en-US', { weekday: 'short' });
+                  
+                  return (
+                    <div key={idx} className="flex flex-col items-center justify-end h-full gap-2 w-full group">
+                      <div className="text-[10px] font-mono text-[#ff7a00] opacity-0 group-hover:opacity-100 transition-opacity">
+                        {dayTotal}h
+                      </div>
+                      <div 
+                        className="w-full bg-[#1e1e1e] border border-border rounded-t flex flex-col justify-end overflow-hidden group-hover:border-[#ff7a00]/50 transition-all"
+                        style={{ height: `${barHeight}%` }}
+                      >
+                        <div className="w-full bg-[#ff7a00] opacity-80" style={{ height: '100%' }}></div>
+                      </div>
+                      <span className="text-[9px] font-sans text-zinc-500 uppercase tracking-widest">{dayName}</span>
+                    </div>
+                  );
+                })
+              )}
             </div>
           </div>
 
