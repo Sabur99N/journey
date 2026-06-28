@@ -5,15 +5,14 @@
 
 import { UserState, Task, DailyLog, Badge, Goal, Note, WeeklyReview, RoadmapSection, StudyModule, Reminder } from '../types';
 
-const LOCAL_STORAGE_KEY = "saburs_journey_state_v1";
+const LOCAL_STORAGE_KEY = "saburs_journey_state_v2"; // Incremented to wipe old state
 
 export const DEFAULT_TASKS: Task[] = [
-  { id: 'workout', name: 'Active Fitness Workout', category: 'health', completed: false },
-  { id: 'jog', name: 'Morning Jog & Cardio', category: 'health', completed: false },
-  { id: 'threejs', name: 'Three.js Learning Core (1 hour)', category: 'study', completed: false },
-  { id: 'frontend', name: 'Frontend Growth Study (1 hour)', category: 'study', completed: false },
-  { id: 'sleep', name: 'Bedtime Routine Before 11 PM', category: 'routine', completed: false },
-  { id: 'water', name: 'Drink 8 Glasses of Water', category: 'routine', completed: false }
+  { id: 'jog', name: '06:20 Walk/Jog', category: 'health', completed: false },
+  { id: 'workout', name: '07:00 Workout', category: 'health', completed: false },
+  { id: 'threejs', name: '21:00 Three.js Learning Block', category: 'study', completed: false },
+  { id: 'frontend', name: '22:00 Frontend Learning Block', category: 'study', completed: false },
+  { id: 'sleep', name: '23:00 Sleep', category: 'routine', completed: false }
 ];
 
 const INITIAL_ROADMAP_THREEJS: RoadmapSection[] = [
@@ -21,24 +20,23 @@ const INITIAL_ROADMAP_THREEJS: RoadmapSection[] = [
     phase: "Phase 1: Months 1-3",
     title: "The WebGL Foundation",
     timeline: "Months 1-3",
-    status: "completed",
+    status: "active",
     modules: [
-      { id: 't1', title: 'Scene, Camera & Renderer Setup', duration: '12h', completed: true, topics: ['Creating dynamic Scenes', 'Perspective vs Orthographic Camera', 'WebGLRenderer and resizing'] },
-      { id: 't2', title: 'Geometry & Custom Meshes', duration: '15h', completed: true, topics: ['Box, Sphere, Torus shapes', 'BufferGeometry and vertices', 'Efficient material assignments'] },
-      { id: 't3', title: 'Lighting & Shadows', duration: '14h', completed: true, topics: ['Ambient, Directional, Point lights', 'Shadow mapping & bias', 'Performance implications'] },
-      { id: 't4', title: 'Vectors & Trigonometry', duration: '10h', completed: true, topics: ['Vector3 manipulation', 'Dot & Cross products', 'Dynamic movement using sine & cosine'] }
+      { id: 't1', title: 'Scene, Camera, Renderer', duration: '20h', completed: false, topics: ['Basic Setup', 'Canvas resizing', 'Render loops'] },
+      { id: 't2', title: 'Geometry & Custom Meshes', duration: '15h', completed: false, topics: ['Box, Sphere, Torus', 'BufferGeometry'] },
+      { id: 't3', title: 'Lighting & Shadows', duration: '14h', completed: false, topics: ['Ambient, Directional, Point', 'Shadow maps'] },
+      { id: 't4', title: 'Vectors & Math', duration: '10h', completed: false, topics: ['Vector3 manipulation', 'Trigonometry basics'] }
     ]
   },
   {
     phase: "Phase 2: Months 4-6",
-    title: "Materials, Physics & Animation",
+    title: "Materials, Models & Animation",
     timeline: "Months 4-6",
-    status: "active",
+    status: "locked",
     modules: [
-      { id: 't5', title: 'Advanced Materials & Shading', duration: '16h', completed: true, topics: ['MeshStandardMaterial', 'Roughness, Metalness, Normal maps', 'Custom shaders introductions'] },
-      { id: 't6', title: 'High-Res Textures & Lighting Maps', duration: '14h', completed: false, topics: ['Mipmapping and filtering', 'HDR environment maps', 'Shadow and baking maps'] },
-      { id: 't7', title: 'Loading 3D Models (GLTF, FBX)', duration: '18h', completed: false, topics: ['GLTFLoader, DRACO compression', 'Animation mixer and bones', 'Model optimization in Blender'] },
-      { id: 't8', title: 'Micro-Interactions with GSAP', duration: '12h', completed: false, topics: ['Timeline animations', 'ScrollTrigger integration', 'Raycasting hover/click events'] }
+      { id: 't5', title: 'Materials & Textures', duration: '20h', completed: false, topics: ['StandardMaterial', 'Normal Maps', 'Roughness'] },
+      { id: 't6', title: 'Models & Optimization', duration: '15h', completed: false, topics: ['GLTF Loader', 'DRACO compression'] },
+      { id: 't7', title: 'GSAP Integrations', duration: '15h', completed: false, topics: ['ScrollTrigger', 'Timelines', 'Camera animation'] }
     ]
   },
   {
@@ -47,9 +45,9 @@ const INITIAL_ROADMAP_THREEJS: RoadmapSection[] = [
     timeline: "Months 7-9",
     status: "locked",
     modules: [
-      { id: 't9', title: 'Custom Shaders (GLSL)', duration: '24h', completed: false, topics: ['Vertex and Fragment shaders', 'Uniforms, Attributes, Varyings', 'Passing matrix positions'] },
-      { id: 't10', title: 'Noise & Mathematical displacement', duration: '20h', completed: false, topics: ['Perlin & Simplex noise', 'Animated wave terrains', 'Procedural skyboxes and clouds'] },
-      { id: 't11', title: 'Procedural Shader Effects', duration: '22h', completed: false, topics: ['Raymarching intro', 'Custom post-processing composer', 'Depth of field and blooms'] }
+      { id: 't8', title: 'Custom Shaders (GLSL)', duration: '24h', completed: false, topics: ['Vertex and Fragment shaders', 'Uniforms'] },
+      { id: 't9', title: 'Noise & Mathematics', duration: '20h', completed: false, topics: ['Perlin noise', 'Wave displacement'] },
+      { id: 't10', title: 'Procedural Effects', duration: '22h', completed: false, topics: ['Post-processing', 'Raymarching intro'] }
     ]
   },
   {
@@ -58,17 +56,17 @@ const INITIAL_ROADMAP_THREEJS: RoadmapSection[] = [
     timeline: "Months 10-12",
     status: "locked",
     modules: [
-      { id: 't12', title: 'Journey Portfolio Masterpiece', duration: '50h', completed: false, topics: ['Creative 3D grid layout', 'Physics-based menu scrolling', 'Optimized shader backgrounds', 'Sound integration'] }
+      { id: 't11', title: 'Portfolio Journey Project', duration: '50h', completed: false, topics: ['Creative 3D grid layout', 'Physics', 'Optimization'] }
     ]
   }
 ];
 
 const INITIAL_ROADMAP_FRONTEND: StudyModule[] = [
-  { id: 'f1', title: 'Advanced JavaScript Deep-Dive', duration: '18h', completed: true, topics: ['Event Loop, Microtasks & Macrotasks', 'Closures & Scope Chain', 'Prototypal Inheritance & Proxy objects'] },
-  { id: 'f2', title: 'TypeScript for UI Engineers', duration: '16h', completed: true, topics: ['Generic types & Constraints', 'Mapped types & Conditonals', 'Utility types & sound configuration'] },
-  { id: 'f3', title: 'React 19 Hooks & Rendering', duration: '20h', completed: true, topics: ['React compiler and auto-memoization', 'Concurrent features: transitions, useActionState', 'Server components hydration'] },
-  { id: 'f4', title: 'Next.js 15 App Router Architecture', duration: '24h', completed: false, topics: ['Nested layouts & Streaming UI', 'Server actions & Middleware security', 'Static vs dynamic optimization'] },
-  { id: 'f5', title: 'Performance Optimization Patterns', duration: '18h', completed: false, topics: ['Core Web Vitals acceleration', 'Image/Font loader optimization', 'Virtual routing and light bundle sizes'] }
+  { id: 'f1', title: 'JavaScript Deep Dive', duration: '20h', completed: false, topics: ['Event Loop', 'Closures', 'Prototypes', 'Performance'] },
+  { id: 'f2', title: 'TypeScript Mastery', duration: '20h', completed: false, topics: ['Generics', 'Utility types', 'Advanced Inference'] },
+  { id: 'f3', title: 'React Internals', duration: '25h', completed: false, topics: ['Reconciliation', 'Concurrent rendering', 'Hooks deep dive'] },
+  { id: 'f4', title: 'Architecture and Performance', duration: '20h', completed: false, topics: ['Design Patterns', 'Core Web Vitals', 'Bundle sizing'] },
+  { id: 'f5', title: 'Next.js and Production Systems', duration: '25h', completed: false, topics: ['App Router', 'Server Actions', 'Streaming'] }
 ];
 
 export const ALL_BADGES: Badge[] = [
@@ -81,133 +79,47 @@ export const ALL_BADGES: Badge[] = [
   { id: 'water_master', title: 'Hydro Powered', description: 'Complete water goal 10 days in a row', icon: 'Droplet', unlockedAt: null, requirementDays: 10 }
 ];
 
-// Seed historical logs helper: Backfill past 14 days
-const generateSeedHistory = (currentDate: Date): DailyLog[] => {
-  const history: DailyLog[] = [];
-  const daysToSeed = 15; // Log past 15 days of progressive entries
-
-  for (let i = daysToSeed; i >= 1; i--) {
-    const seedDate = new Date(currentDate);
-    seedDate.setDate(currentDate.getDate() - i);
-    const dateString = seedDate.toISOString().split('T')[0];
-
-    // Some completion variance to make heatmap realistic
-    const completionSeed = (i % 3 === 0) ? 0.6 : (i % 5 === 0) ? 0.5 : 1.0; 
-    const isFullCompletion = completionSeed === 1.0;
-
-    const tasks: Task[] = DEFAULT_TASKS.map(t => {
-      // Toggle completed based on seed completion rate
-      let comp = isFullCompletion;
-      if (!isFullCompletion) {
-        if (t.id === 'workout') comp = i % 2 === 0;
-        if (t.id === 'jog') comp = i % 2 !== 0;
-        if (t.id === 'threejs') comp = i % 3 !== 0; // Study mostly done
-        if (t.id === 'frontend') comp = i % 4 !== 0;
-        if (t.id === 'sleep') comp = i % 3 === 0;
-        if (t.id === 'water') comp = true;
-      }
-      return { ...t, completed: comp };
-    });
-
-    history.push({
-      date: dateString,
-      tasks,
-      studyHours: {
-        threejs: isFullCompletion ? 1 : (i % 3 !== 0 ? 1 : 0),
-        frontend: isFullCompletion ? 1 : (i % 4 !== 0 ? 1 : 0),
-      },
-      completedAt: isFullCompletion ? seedDate.toISOString() : undefined,
-      customNotes: i % 4 === 0 ? `Finished module practice under Phase ${i % 2 === 0 ? '1' : '2'}. Got physics demo working smoothly!` : undefined
-    });
-  }
-
-  return history;
-};
-
 export const getInitialState = (): UserState => {
   const currentDate = new Date();
-  const seedLogs = generateSeedHistory(currentDate);
-
-  // Calculate some realistic accumulated stats based on seed logs
-  const totalThreejs = seedLogs.reduce((acc, curr) => acc + curr.studyHours.threejs, 25); // Include a buffer of 25 existing completed studies
-  const totalFrontend = seedLogs.reduce((acc, curr) => acc + curr.studyHours.frontend, 30); // Buffer of 30
-
-  // Standard streak calculation
-  const streak = 6; // Set active streak count to 6 so completing today earns the 7-day badge! Perfect onboarding.
-  const longestStreak = 12;
-
-  // Level & XP based on accumulated hours and completions:
-  // Completing 1 task = 10 XP, Completed day = 50 bonus XP, logged hour = 20 XP
-  const calculatedXP = (seedLogs.length * 120) + 1200; // Let's seed around 2800 XP
-  const level = Math.floor(calculatedXP / 500) + 1; // 500 XP per level
-
+  
   const defaultGoals: Goal[] = [
-    { id: '1', text: "Complete Three.js Months 1-3 Core WebGL modules", deadline: "2026-07-31", tag: 'threejs', completed: true },
-    { id: '2', text: "Deploy WebGL-integrated interactive Resume Showcase", deadline: "2026-08-15", tag: 'portfolio', completed: false },
-    { id: '3', text: "Perfect standard React 19 concurrent hydration pipeline metrics", deadline: "2026-09-01", tag: 'career', completed: false },
-    { id: '4', text: "Achieve consistent morning jog rhythm: 5km visual log tracker", deadline: "2026-07-20", tag: 'fitness', completed: false }
+    { id: '1', text: "Study 2 focused hours daily.", deadline: "2027-01-01", tag: 'career', completed: false },
+    { id: '2', text: "Build something every day.", deadline: "2027-01-01", tag: 'portfolio', completed: false },
+    { id: '3', text: "Finish before starting something new.", deadline: "2027-01-01", tag: 'career', completed: false },
+    { id: '4', text: "Stay consistent for 365 days.", deadline: "2027-01-01", tag: 'fitness', completed: false }
   ];
 
   const defaultNotes: Note[] = [
     {
       id: "n-1",
-      title: "Three.js - Vector Mathematics Cheat Sheet",
-      content: `### Essential Vector Operations for Creative Frontends \n\n*   **Vector displacement**: Use \`position.add(direction.multiplyScalar(speed))\` inside the tick/render loop animate meshes. \n*   **Trigonometric Cycles**: Applying standard \`Math.sin(elapsedTime * scale)\` creates gorgeous floaty waves for custom camera heights.\n*   **Camera focus**: Bind mouse coordinates smoothly using lerps:\n    \`\`\`js\n    camera.position.x += (mouseX - camera.position.x) * 0.05;\n    \`\`\`\n`,
-      updatedAt: new Date(currentDate.getTime() - 24 * 3600 * 1000).toISOString()
-    },
-    {
-      id: "n-2",
-      title: "Self-Review Plan & React 19 Performance",
-      content: `### Target Milestones for Sabur's Creative Path\n\n1.  Master React 19 compile hooks: \`useActionState\`, \`useFormStatus\`, and async transition buffers.\n2.  Study how to bake ambient occlusion maps in Blender to reduce expensive real-time shadows.\n3.  Build custom GLSL wave animations to serve as modular site headers.`,
-      updatedAt: new Date(currentDate.getTime() - 2 * 24 * 3600 * 1000).toISOString()
+      title: "Sabur's Mission Statement",
+      content: `Become a Creative Frontend Engineer with strong skills in Frontend Development, Three.js, GSAP, Shaders, and Interactive Storytelling. \n\n**Rules:**\n1. Study 2 focused hours daily.\n2. Build something every day.\n3. Finish before starting something new.\n4. Track Workout, Three.js, Frontend, Sleep.\n5. Stay consistent for 365 days.`,
+      updatedAt: currentDate.toISOString()
     }
   ];
-
-  const defaultWeeklyReviews: WeeklyReview[] = [
-    {
-      id: "wr-1",
-      weekRange: "June 08 - June 14",
-      wins: [
-        "Completed baseline Three.js renderer configurations",
-        "Achieved 100% hydration check on most days",
-        "Set up standard GitHub repository structure"
-      ],
-      challenges: [
-        "Struggled to sleep before 11 PM on Wednesday during shader deep-dives.",
-        "Need better scheduling to avoid fitting jog late"
-      ],
-      focusNextWeek: "Transition into Materials and standard Baked textures in Three.js framework.",
-      energyLevel: 8
-    }
-  ];
-
-  // Process achievements unlock statuses based on seed initial values
-  const processInitialBadges = [...ALL_BADGES];
-  // 6 cumulative days streak, plus total study cumulative hours
-  if (totalThreejs + totalFrontend >= 50) {
-    const badge = processInitialBadges.find(b => b.id === 'hours_50');
-    if (badge) badge.unlockedAt = new Date().toISOString();
-  }
 
   const defaultReminders: Reminder[] = [
-    { id: '1', time: '21:00', label: 'Three.js Learning Time', enabled: true, message: 'Time to open VS Code and deep-dive into camera/renderer matrices!' },
-    { id: '2', time: '22:00', label: 'Frontend Learning Time', enabled: true, message: 'Focus cycle: Study React concurrent hydration performance optimization.' },
-    { id: '3', time: '23:00', label: 'Sleep Time Routine', enabled: true, message: 'Save your files, drink water, and sleep for maximum neural recovery!' }
+    { id: '1', time: '06:00', label: 'Wake up', enabled: true, message: 'Time to wake up! 06:05-06:20 Freshen up, water, mobility.' },
+    { id: '2', time: '06:20', label: 'Walk/Jog', enabled: true, message: 'Get outside for your morning Walk/Jog.' },
+    { id: '3', time: '07:00', label: 'Workout', enabled: true, message: 'Time to crush the workout block.' },
+    { id: '4', time: '21:00', label: 'Three.js Learning Block', enabled: true, message: 'Time to focus on 3D, WebGL, and Three.js!' },
+    { id: '5', time: '22:00', label: 'Frontend Learning Block', enabled: true, message: 'Focus cycle: Deep dive into Frontend Architecture.' },
+    { id: '6', time: '23:00', label: 'Sleep', enabled: true, message: 'Rest and recover for tomorrow.' }
   ];
 
   return {
-    level,
-    xp: calculatedXP,
-    streak,
-    longestStreak,
-    totalHoursThreejs: totalThreejs,
-    totalHoursFrontend: totalFrontend,
-    waterIntakeGlassToday: 3, // Start today at 3 glasses
+    level: 1,
+    xp: 0,
+    streak: 0,
+    longestStreak: 0,
+    totalHoursThreejs: 0,
+    totalHoursFrontend: 0,
+    waterIntakeGlassToday: 0,
     waterGoalGlasses: 8,
-    history: seedLogs,
+    history: [], // Start completely fresh
     goals: defaultGoals,
     notes: defaultNotes,
-    weeklyReviews: defaultWeeklyReviews,
+    weeklyReviews: [],
     roadmapThreejs: INITIAL_ROADMAP_THREEJS,
     roadmapFrontend: INITIAL_ROADMAP_FRONTEND,
     reminders: defaultReminders
@@ -218,12 +130,10 @@ export const loadUserState = (): UserState => {
   try {
     const data = localStorage.getItem(LOCAL_STORAGE_KEY);
     if (data) {
-      const parsed = JSON.parse(data);
-      // Double check date offsets to handle active logs migration
-      return parsed;
+      return JSON.parse(data);
     }
   } catch (error) {
-    console.error("Failed to load user state from localStorage", error);
+    console.error("Failed to load user state", error);
   }
   return getInitialState();
 };
@@ -232,6 +142,6 @@ export const saveUserState = (state: UserState): void => {
   try {
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(state));
   } catch (error) {
-    console.error("Failed to save state to LocalStorage", error);
+    console.error("Failed to save state", error);
   }
 };

@@ -195,11 +195,11 @@ export const Dashboard: React.FC<DashboardProps> = ({
             </svg>
 
             {/* Float values inside the speed gauge */}
-            <div className="absolute bottom-2 flex flex-col items-center justify-center text-center">
-              <span className={`text-4xl md:text-5xl font-bold font-sans tracking-tight leading-none ${statusColorClass}`}>
+            <div className="absolute bottom-0 flex flex-col items-center justify-center text-center w-full pb-3">
+              <span className={`text-2xl md:text-3xl font-bold font-sans tracking-tight leading-none ${statusColorClass}`}>
                 {momentumStatus}
               </span>
-              <span className="font-sans text-[11px] font-medium text-zinc-400 mt-2 tracking-wide block">
+              <span className="font-sans text-[11px] font-medium text-zinc-400 mt-1.5 tracking-wide block bg-[#0a0a0a]/80 px-2 rounded">
                 {completedTasksCount} / {totalTasksCount} Daily Checkpoints
               </span>
             </div>

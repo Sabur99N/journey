@@ -17,20 +17,24 @@ export default defineConfig(() => {
         injectManifest: {
           injectionPoint: 'self.__WB_MANIFEST',
         },
-        includeAssets: ['favicon.ico', 'robots.txt', 'apple-touch-icon.png'],
+        devOptions: {
+          enabled: true,
+          type: 'module',
+        },
+        includeAssets: ['logo.png'],
         manifest: {
           short_name: "SaburJourney",
           name: "Sabur's Journey - Elite Frontend Tracker",
           description: "Personal growth companion to transform into an Elite Creative Frontend Engineer.",
           icons: [
             {
-              src: "https://img.icons8.com/nolan/256/space-port.png",
+              src: "/logo.png",
               sizes: "192x192",
               type: "image/png",
               purpose: "any maskable"
             },
             {
-              src: "https://img.icons8.com/nolan/512/space-port.png",
+              src: "/logo.png",
               sizes: "512x512",
               type: "image/png",
               purpose: "any"
