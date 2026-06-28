@@ -1,0 +1,6 @@
+{
+  "name": "Sabur's Journey",
+  "description": "An elite creative frontend growth tracker designed to help creative developers scale their skills in style.",
+  "requestFramePermissions": ["notifications"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

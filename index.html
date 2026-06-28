@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en" class="bg-[#03030b] text-slate-100 antialiased">
+  <head>
+    <meta charset="UTF-8" />
+    <script>
+      // Sandbox-safe global proxy wrapper to prevent TypeError: Cannot set property fetch of #<Window>
+      (function() {
+        try {
+          var customGlobal = new Proxy(window, {
+            get: function(target, prop) {
+              if (prop === 'fetch') {
+                return window.fetch;
+              }
+              var val = target[prop];
+              if (typeof val === 'function' && prop !== 'constructor' && !prop.toString().includes('Element')) {
+                return val.bind(target);
+              }
+              return val;
+            },
+            set: function(target, prop, value) {
+              if (prop === 'fetch') {
+                console.warn("Intercepted read-only fetch assignment safely.");
+                return true;
+              }
+              try {
+                target[prop] = value;
+              } catch (e) {
+                console.warn("Protected write error for property: " + String(prop));
+              }
+              return true;
+            }
+          });
+
+          // Expose as 'global' which many polyfills and bundles write to direct
+          try {
+            Object.defineProperty(window, 'global', {
+              value: customGlobal,
+              writable: true,
+              configurable: true,
+              enumerable: true
+            });
+          } catch (e) {}
+
+          // Also map configurable window.globalThis
+          try {
+            var desc = Object.getOwnPropertyDescriptor(window, 'globalThis');
+            if (!desc || desc.configurable) {
+              Object.defineProperty(window, 'globalThis', {
+                value: customGlobal,
+                writable: true,
+                configurable: true,
+                enumerable: true
+              });
+            }
+          } catch (e) {}
+
+        } catch (err) {
+          console.warn("Safe global context initializer error: ", err);
+        }
+      })();
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="theme-color" content="#0a0a0a" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="icon" type="image/png" href="https://img.icons8.com/nolan/256/space-port.png" />
+    
+    <!-- Google Fonts for Premium Dark Theme -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+    <title>Sabur's Journey — Premium Tracker</title>
+  </head>
+  <body class="bg-[#0a0a0a] text-zinc-100 min-h-screen overflow-x-hidden selection:bg-[#ff7a00]/30 selection:text-white">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+

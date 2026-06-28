@@ -1,0 +1,192 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+  
+  /* Brand Scale based on #FF7A00 */
+  --color-brand-50: #fff3e5;
+  --color-brand-100: #ffe4c6;
+  --color-brand-200: #ffca91;
+  --color-brand-300: #ffaa52;
+  --color-brand-400: #ff9124;
+  --color-brand-500: #ff7a00; /* Base Accent */
+  --color-brand-600: #ea6400;
+  --color-brand-700: #c24b00;
+  --color-brand-800: #9a3d08;
+  --color-brand-900: #7c330b;
+  --color-brand-950: #431704;
+
+  /* Semantic Tokens for Premium Dark Theme */
+  --color-bg: #0a0a0a;
+  --color-surface: #161616;
+  --color-surface-hover: #1e1e1e;
+  --color-border: #2a2a2a;
+  --color-border-hover: #3f3f46;
+  --color-text: #f4f4f5;
+  --color-text-muted: #a1a1aa;
+  
+  /* Retaining required semantic colors */
+  --color-success: #16a34a;
+  --color-warning: #f59e0b;
+  --color-danger: #dc2626;
+  --color-info: #0ea5e9;
+  
+  /* Legacy mapping overrides (removing neon) */
+  --color-cosmic-bg: var(--color-bg);
+  --color-cosmic-card: var(--color-surface);
+  --color-cosmic-border: var(--color-border);
+  --color-neon-blue: var(--color-brand-500);
+  --color-neon-purple: var(--color-brand-500);
+  --color-neon-pink: var(--color-brand-500);
+  --color-neon-green: var(--color-brand-500);
+  --color-lime-accent: var(--color-brand-500);
+  --color-orange-accent: var(--color-brand-500);
+  
+  /* Modular Type Scale */
+  --font-size-xs: 0.75rem; /* 12px */
+  --font-size-sm: 0.875rem; /* 14px */
+  --font-size-base: 1rem; /* 16px */
+  --font-size-lg: 1.125rem; /* 18px */
+  --font-size-xl: 1.333rem; /* ~21px */
+  --font-size-2xl: 1.777rem; /* ~28px */
+  --font-size-3xl: 2.369rem; /* ~38px */
+  --font-size-4xl: 3.157rem; /* ~50px */
+}
+
+/* Base style resets */
+html, body {
+  font-family: var(--font-sans);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Typography refinements */
+h1, h2, h3, h4, h5, h6 {
+  letter-spacing: -0.02em;
+}
+
+/* Premium Panel Styles */
+.premium-panel {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  transition: border-color 0.2s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.premium-panel:hover {
+  border-color: var(--color-border-hover);
+}
+
+/* Glass-panel fallback for old classes */
+.glass-panel, .glass-panel-glow {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5);
+  transition: all 0.2s ease-out;
+}
+
+.glass-panel-glow:hover {
+  border-color: var(--color-brand-500);
+  box-shadow: 0 0 0 1px var(--color-brand-500), 0 4px 20px -2px rgba(0, 0, 0, 0.6);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #3f3f46;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-brand-500);
+}
+
+/* Premium Input Styles */
+.premium-input {
+  background-color: #1e1e1e;
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  border-radius: 8px;
+  padding: 0.625rem 1rem;
+  transition: all 0.2s ease-in-out;
+  outline: none;
+}
+.premium-input::placeholder {
+  color: var(--color-text-muted);
+}
+.premium-input:focus {
+  border-color: var(--color-brand-500);
+  box-shadow: 0 0 0 1px var(--color-brand-500);
+}
+
+/* Premium Button Styles */
+.premium-button {
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: 9999px; /* Pill shaped */
+  padding: 0.5rem 1rem;
+  transition: all 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.premium-button:hover {
+  background-color: #1e1e1e;
+  border-color: var(--color-border-hover);
+  transform: translateY(-1px);
+}
+.premium-button.primary {
+  background-color: var(--color-brand-500);
+  color: #fff;
+  border: none;
+}
+.premium-button.primary:hover {
+  background-color: var(--color-brand-600);
+  box-shadow: 0 4px 12px rgba(255, 122, 0, 0.25);
+}
+
+/* Removing legacy animations and effects */
+.animate-breathe, .neon-glow-blue, .neon-glow-purple, .neon-glow-green {
+  animation: none;
+  box-shadow: none;
+}
+
+.cosmic-grid, .radial-spotlight, .radial-spotlight-alt {
+  display: none !important;
+}
+
+/* Print Overrides for Professional HTML-to-PDF Export */
+@media print {
+  nav, button, footer, .no-print {
+    display: none !important;
+  }
+  
+  body, .print-card {
+    background: #ffffff !important;
+    color: #000000 !important;
+    font-size: 11pt !important;
+  }
+  
+  .glass-panel, .glass-panel-glow, .premium-panel {
+    border: 1px solid #cccccc !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+  }
+
+  .print-page-break {
+    page-break-after: always;
+  }
+}
